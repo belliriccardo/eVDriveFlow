@@ -95,13 +95,13 @@ class EVEmulator(DcEVDataModel):
     provided_energy: int = 0
     total_energy: int = 0
     evsemaximum_discharge_power: Optional[DcRationalNumberType] = DcRationalNumberType(0, 0)
-    _evsemaximum_discharge_power: Optional[DcRationalNumberType] = DcRationalNumberType(0, 0)
+    _evsemaximum_discharge_power: Optional[DcRationalNumberType] = field(default_factory=lambda: DcRationalNumberType(0, 0))
     evsemaximum_charge_power: Optional[DcRationalNumberType] = DcRationalNumberType(0, 0)
-    _evsemaximum_charge_power: Optional[DcRationalNumberType] = DcRationalNumberType(0, 0)
+    _evsemaximum_charge_power: Optional[DcRationalNumberType] = field(default_factory=lambda: DcRationalNumberType(0, 0))
     evmaximum_discharge_power: Optional[DcRationalNumberType] = DcRationalNumberType(0, 0)
-    _evmaximum_discharge_power: Optional[DcRationalNumberType] = DcRationalNumberType(0, 0)
+    _evmaximum_discharge_power: Optional[DcRationalNumberType] = field(default_factory=lambda: DcRationalNumberType(0, 0))
     evmaximum_charge_power: Optional[DcRationalNumberType] = DcRationalNumberType(0, 0)
-    _evmaximum_charge_power: Optional[DcRationalNumberType] = DcRationalNumberType(0, 0)
+    _evmaximum_charge_power: Optional[DcRationalNumberType] = field(default_factory=lambda: DcRationalNumberType(0, 0))
 
     def __post_init__(self):
         self.supported_app_protocols = [AppProtocolType(protocol_namespace=V2G_CI_MSG_DC_NAMESPACE,

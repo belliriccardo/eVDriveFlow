@@ -256,3 +256,20 @@ This error comes from the library *libxcb* which is used in package *Qt* for GUI
 ```bash
 sudo apt-get install libxcb-randr0-dev libxcb-xtest0-dev libxcb-xinerama0-dev libxcb-shape0-dev libxcb-xkb-dev
 ```
+### IMPORTANT!!
+Also, inside the module `matplotlib`, add this at line `1742` of:
+```
+.venv\Lib\site-packages\matplotlib\backend_bases.py
+```
+At the end of `FigureCanvasBase`'s `__init__()`: instead of
+```python
+super().__init__()  # Typically the GUI widget init (if any).
+```
+put this instead:
+```python
+if type(self).__module__ == "shared.custom_canvas":
+    super().__init__(fig=figure)
+else:
+    super().__init__()  # Typically the GUI widget init (if any).
+```
+This might be a bug in `matplotlib`, as the wrong `super().__init__()` gets called.

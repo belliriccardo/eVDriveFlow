@@ -13,6 +13,7 @@
 """
 
 from dataclasses import dataclass, field
+from pathlib import Path
 from typing import Optional, List
 from shared.xml_classes.app_protocol import AppProtocolType
 from shared.xml_classes.common_messages import AuthorizationType, ServiceListType, PnCAsresAuthorizationModeType, \
@@ -84,7 +85,8 @@ class DcEVSEDataModel(EVSEDataModel):
 class IEVSEController(ControllerInterface):
     def get_config(self):
         config = ConfigParser()
-        config.read("evse_config.ini")
+        # config.read("evse_config.ini")
+        config.read(Path(__file__).parent / "evse_config.ini")
         return config
 
 

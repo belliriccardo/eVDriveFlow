@@ -76,7 +76,7 @@ class EVSEEmulator(DcEVSEDataModel):
     evseminimum_discharge_current: Optional[DcRationalNumberType] = None
     evsemaximum_voltage: Optional[DcRationalNumberType] = None
     evseminimum_voltage: Optional[DcRationalNumberType] = None
-    evsepresent_current: Optional[DcRationalNumberType] = DcRationalNumberType(0, 0)
+    evsepresent_current: Optional[DcRationalNumberType] = field(default_factory=lambda: DcRationalNumberType(0, 0))
     evsepresent_power: Optional[DcRationalNumberType] = None  # This element is not specified in the standard, it is here
     # solely for the HMI.
     internal_resistance: Optional[float] = 100 * 10 ** -3
@@ -87,14 +87,14 @@ class EVSEEmulator(DcEVSEDataModel):
     state: str = None
     _state: str = field(init=False, repr=False)
     battery_capacity: Optional[DcRationalNumberType] = DcRationalNumberType(0, 0)
-    _battery_capacity: Optional[DcRationalNumberType] = DcRationalNumberType(0, 0)
+    _battery_capacity: Optional[DcRationalNumberType] = field(default_factory=lambda: DcRationalNumberType(0, 0))
     consumed_energy: int = 0
     provided_energy: int = 0
     total_energy: int = 0
     evmaximum_discharge_power: Optional[DcRationalNumberType] = DcRationalNumberType(0, 0)
-    _evmaximum_discharge_power: Optional[DcRationalNumberType] = DcRationalNumberType(0, 0)
+    _evmaximum_discharge_power: Optional[DcRationalNumberType] = field(default_factory=lambda: DcRationalNumberType(0, 0))
     evmaximum_charge_power: Optional[DcRationalNumberType] = DcRationalNumberType(0, 0)
-    _evmaximum_charge_power: Optional[DcRationalNumberType] = DcRationalNumberType(0, 0)
+    _evmaximum_charge_power: Optional[DcRationalNumberType] = field(default_factory=lambda: DcRationalNumberType(0, 0))
 
     def __post_init__(self):
         self.evseid = "ZZ000000"

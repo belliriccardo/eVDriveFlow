@@ -11,7 +11,7 @@
 
 
 """
-
+from pathlib import Path
 from shared.controller import ControllerInterface
 from typing import Optional, List
 from shared.xml_classes.app_protocol import AppProtocolType
@@ -87,7 +87,8 @@ class IEVController(ControllerInterface):
 
     def get_config(self):
         config = ConfigParser()
-        config.read("ev_config.ini")
+        # config.read("ev_config.ini")
+        config.read(Path(__file__).parent / "ev_config.ini")
         return config
 
     def set_network_parameters(self):

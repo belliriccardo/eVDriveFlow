@@ -13,12 +13,12 @@
 """
 
 import matplotlib.pyplot as plt
-from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg# as FigureCanvas
 from matplotlib.animation import TimedAnimation
 import numpy as np
 
 
-class CustomCanvas(FigureCanvas, TimedAnimation):
+class CustomCanvas(FigureCanvasQTAgg, TimedAnimation):
     """This is the class that will plot the data and display it properly in 15118 DC use case.
 
     """
@@ -75,7 +75,7 @@ class CustomCanvas(FigureCanvas, TimedAnimation):
         self.energy_values, self.energy_line = self.get_plot_data(self.energy_ax)
 
         self.energy_ax.legend()
-        FigureCanvas.__init__(self, self.figure)
+        FigureCanvasQTAgg.__init__(self, self.figure)
         TimedAnimation.__init__(self, self.figure, interval=20, blit=True)
 
     def new_frame_seq(self):

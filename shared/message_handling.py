@@ -30,7 +30,10 @@ from jpype.types import *
 
 # The code below allows usage of Java classes by starting a JVM inside Python. This way, we can access variables
 # initialized in the VM and use functions written in Java.
-classpath = f'{str.join(":", ["../shared/lib/" + name for name in os.listdir("../shared/lib/")])}'
+from pathlib import Path
+file_path = Path(__file__).parent.parent.resolve()
+sep = ":" if os.name == "posix" else ";"
+classpath = f'{str.join(sep, [f"{file_path}/shared/lib/" + name for name in os.listdir(f"{file_path}/shared/lib/")])}'
 jpype.startJVM(jpype.getDefaultJVMPath(), '-ea', "-Djava.class.path=%s" % classpath)
 from java.io import FileInputStream, InputStream, ByteArrayInputStream, ByteArrayOutputStream, StringWriter, FileWriter
 from java.lang import String

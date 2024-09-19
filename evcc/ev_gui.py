@@ -12,7 +12,8 @@
 
 """
 import sys
-sys.path.append("..")
+from pathlib import Path
+sys.path.append(str(Path(__file__).resolve().parent.parent))
 from shared.gui import GUI
 from shared.utils import rational_to_float
 from shared.custom_canvas import CustomCanvas

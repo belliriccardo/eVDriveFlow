@@ -11,8 +11,9 @@
 
 
 """
+from pathlib import Path
 import sys
-sys.path.append("..")
+sys.path.append(str(Path(__file__).resolve().parent.parent))
 from shared.gui import GUI
 from shared.custom_canvas import CustomCanvas
 from PyQt5 import QtCore, QtGui, QtWidgets
