@@ -3,15 +3,17 @@
    :platform: Unix
    :synopsis: A module that implements the server's side session_handler.
 
-.. Copyright 2022 EDF 
+.. Copyright 2022 EDF
 
-.. moduleauthor:: Oscar RODRIGUEZ INFANTE, Tony ZHOU, Trang PHAM, Efflam OLLIVIER 
+.. moduleauthor:: Oscar RODRIGUEZ INFANTE, Tony ZHOU, Trang PHAM, Efflam OLLIVIER
 
 .. License:: This source code is licensed under the MIT License.
 
 
 """
 
+from pathlib import Path
+from pprint import pprint
 from shared.session_handler import SessionHandler
 from secc.udp_server import get_udp_server
 from secc.tcp_server import get_tcp_server
@@ -20,16 +22,16 @@ from configparser import ConfigParser
 
 
 class EVSESessionHandler(SessionHandler):
-    """This is the class representing the EVSE session handler.
+    """This is the class representing the EVSE session handler."""
 
-    """
     def __init__(self):
         super(EVSESessionHandler, self).__init__()
         self.set_network_parameters()
 
     def get_config(self):
         config = ConfigParser()
-        config.read("evse_config.ini")
+        # config.read("evse_config.ini")
+        config.read(Path(__file__).parent / "evse_config.ini")
         return config
 
     def start_new_session(self, controller):
@@ -43,4 +45,8 @@ class EVSESessionHandler(SessionHandler):
 
         :return:
         """
+        # interfaces = netifaces.interfaces()
+        # for interface in interfaces:
+        #     print(f"INTERFACE: {interface}")
+        #     pprint(netifaces.ifaddresses(interface))
         return netifaces.ifaddresses(self.interface)[netifaces.AF_INET6][0]["addr"]

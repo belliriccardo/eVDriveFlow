@@ -10,24 +10,27 @@
 .. License:: This source code is licensed under the MIT License.
 
 """
+from pathlib import Path
 
 # Some network settings
 UDP_SERVER_PORT = 15118  # table 18, UDP server port
 LOCAL_LINK_MULTICAST_ADDRESS = "ff02::1"
 
+shared = Path(__file__).resolve().parent
+
 # Filepaths
-EVCC_CERTCHAIN = "../shared/certificates/certs/vehicleCertChain.pem"
-EVCC_KEYFILE = "../shared/certificates/privateKeys/vehicle.key"
-EVCC_CERTIFICATE_AUTHORITY = "../shared/certificates/certs/oemRootCACert.pem"
-SECC_CERTCHAIN = "../shared/certificates/certs/seccCertChain.pem"
-SECC_KEYFILE = "../shared/certificates/privateKeys/secc.key"
-SECC_CERTIFICATE_AUTHORITY = "../shared/certificates/certs/v2gRootCACert.pem"
-APP_PROTOCOL_XSD = "../shared/xsd_files/latest_version/V2G_CI_AppProtocol.xsd"
-COMMON_MESSAGES_XSD = "../shared/xsd_files/latest_version/V2G_CI_CommonMessages.xsd"
-DC_MESSAGES_XSD = "../shared/xsd_files/latest_version/V2G_CI_DC.xsd"
-APP_PROTOCOL_EXIG = "../shared/exig_files/latest_version/V2G_CI_AppProtocol.exig"
-COMMON_MESSAGES_EXIG = "../shared/exig_files/latest_version/V2G_CI_CommonMessages.exig"
-DC_MESSAGES_EXIG = "../shared/exig_files/latest_version/V2G_CI_DC.exig"
+EVCC_CERTCHAIN = shared / "certificates/certs/vehicleCertChain.pem"
+EVCC_KEYFILE = shared / "certificates/privateKeys/vehicle.key"
+EVCC_CERTIFICATE_AUTHORITY = shared / "certificates/certs/oemRootCACert.pem"
+SECC_CERTCHAIN = shared / "certificates/certs/seccCertChain.pem"
+SECC_KEYFILE = shared / "certificates/privateKeys/secc.key"
+SECC_CERTIFICATE_AUTHORITY = shared / "certificates/certs/v2gRootCACert.pem"
+APP_PROTOCOL_XSD = shared / "xsd_files/latest_version/V2G_CI_AppProtocol.xsd"
+COMMON_MESSAGES_XSD = shared / "xsd_files/latest_version/V2G_CI_CommonMessages.xsd"
+DC_MESSAGES_XSD = shared / "xsd_files/latest_version/V2G_CI_DC.xsd"
+APP_PROTOCOL_EXIG = shared / "exig_files/latest_version/V2G_CI_AppProtocol.exig"
+COMMON_MESSAGES_EXIG = shared / "exig_files/latest_version/V2G_CI_CommonMessages.exig"
+DC_MESSAGES_EXIG = shared / "exig_files/latest_version/V2G_CI_DC.exig"
 
 # Passphrase used to access private key. This parameter shall be stored in a secured directory.
 PASSPHRASE = "123456789abcdefgh"

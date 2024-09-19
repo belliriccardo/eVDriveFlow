@@ -101,7 +101,9 @@ def get_udp_client(udp_port, interface):
     addrinfo = socket.getaddrinfo(LOCAL_LINK_MULTICAST_ADDRESS, None)[0]
     # Creating custom socket for UDP multicasting (client side)
     sock = socket.socket(addrinfo[0], socket.SOCK_DGRAM)
-    sock.setsockopt(socket.SOL_SOCKET, socket.SO_BINDTODEVICE, str(interface + '\0').encode('utf-8'))
+    # sock.setsockopt(socket.SOL_SOCKET, socket.SO_BINDTODEVICE, str(interface + '\0').encode('utf-8'))
+    # TODO: socket.SO_BINDTODEVICE is not available in Windows
+    sock.setsockopt(socket.SOL_SOCKET, socket.SO_EXCLUSIVEADDRUSE, str(interface + '\0').encode('utf-8'))
     sock.bind(("", udp_port))
     loop = asyncio.get_event_loop()
     logger.info("Starting UDP client.")

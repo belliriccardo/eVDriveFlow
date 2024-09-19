@@ -13,6 +13,7 @@
 """
 
 import asyncio
+from pathlib import Path
 from shared.session_handler import SessionHandler
 from evcc.ev_session import EVSession
 from evcc.udp_client import get_udp_client
@@ -31,7 +32,8 @@ class EVSessionHandler(SessionHandler):
 
     def get_config(self):
         config = ConfigParser()
-        config.read("ev_config.ini")
+        # config.read("ev_config.ini")
+        config.read(Path(__file__).resolve().parent / "ev_config.ini")
         return config
 
     def set_network_parameters(self):
