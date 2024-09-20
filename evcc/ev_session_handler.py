@@ -19,7 +19,7 @@ from evcc.ev_session import EVSession
 from evcc.udp_client import get_udp_client
 from evcc.tcp_client import get_tcp_client
 from configparser import ConfigParser
-
+from typing import Optional
 
 class EVSessionHandler(SessionHandler):
     """This is a class that represents EV's session handler.
@@ -27,7 +27,7 @@ class EVSessionHandler(SessionHandler):
     """
     def __init__(self):
         super(EVSessionHandler, self).__init__()
-        self.__udp_port = None
+        self.__udp_port: Optional[int] = None
         self.set_network_parameters()
 
     def get_config(self):
@@ -53,7 +53,7 @@ class EVSessionHandler(SessionHandler):
             get_tcp_client(udp_protocol.tcp_server_address + interface, udp_protocol.tcp_server_port, self)
 
     @property
-    def udp_port(self):
+    def udp_port(self) -> Optional[int]:
         return self.__udp_port
 
     @udp_port.setter

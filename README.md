@@ -178,7 +178,7 @@ In file *evse_config.ini*, setup the parameters as shown below:
 [SETTINGS]
     virtual_mode = true
 ```
-The parameter **virtual_mode** in **[SETTINGS]**, allows to set and verify the 61851-1 states from a communication card.To simulate the communication card the virtual_mode parmeter can be set to true.
+The parameter **virtual_mode** in **[SETTINGS]**, allows to set and verify the 61851-1 states from a communication card. To simulate the communication card the virtual_mode parmeter can be set to true.
 
 If it is required to verify or set  61851-1 states, some adaptations of the provided interfaces are needed to read and set the states from the communication card.
 

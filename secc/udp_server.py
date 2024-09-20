@@ -80,7 +80,8 @@ def get_udp_server(tcp_server_address, tcp_server_port):
     mreq = group_bin + struct.pack('@I', 0)
     # Setting options for IPV6 group
     sock.setsockopt(socket.IPPROTO_IPV6, socket.IPV6_JOIN_GROUP, mreq)
-    logger.info("Starting UDP server.")
+    logger.info(f"Starting UDP server on address:port -> {LOCAL_LINK_MULTICAST_ADDRESS}:{UDP_SERVER_PORT}")
+    logger.info(f"TCP server address:port -> {tcp_server_address}:{tcp_server_port}")
     task = loop.create_datagram_endpoint(lambda: UDPServerProtocol(tcp_server_address, tcp_server_port), sock=sock)
     transport, protocol = loop.run_until_complete(task)
     return transport, protocol

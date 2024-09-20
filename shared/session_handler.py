@@ -70,7 +70,7 @@ class SessionHandler:
         return self.__sessions
 
     @sessions.setter
-    def sessions(self, sessions: [CommunicationSession]):
+    def sessions(self, sessions: list[CommunicationSession]):
         self.__sessions = sessions
 
     @property

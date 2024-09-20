@@ -3,9 +3,9 @@
    :platform: Unix
    :synopsis: A module that implements 15118 UDP client.
 
-.. Copyright 2022 EDF 
+.. Copyright 2022 EDF
 
-.. moduleauthor:: Oscar RODRIGUEZ INFANTE, Tony ZHOU, Trang PHAM, Efflam OLLIVIER 
+.. moduleauthor:: Oscar RODRIGUEZ INFANTE, Tony ZHOU, Trang PHAM, Efflam OLLIVIER
 
 .. License:: This source code is licensed under the MIT License.
 
@@ -23,17 +23,15 @@ from shared.log import logger
 from shared.global_values import LOCAL_LINK_MULTICAST_ADDRESS, UDP_SERVER_PORT
 from shared.messages import SDPMessage, SDPReqPayload
 from shared.message_handling import MessageHandler
-import time
-
+import traceback
 
 class UDPClientProtocol(asyncio.DatagramProtocol):
-    """This is the protocol used by the SECC discovery protocol client.
+    """This is the protocol used by the SECC discovery protocol client."""
 
-    """
     def __init__(self):
         super(UDPClientProtocol, self).__init__()
         self.transport = None
-        self.message = bytes(SDPMessage()/SDPReqPayload())
+        self.message = bytes(SDPMessage() / SDPReqPayload())
         self.message_handler = MessageHandler()
         self.tcp_server_address = None
         self.tcp_server_port = None
@@ -42,24 +40,27 @@ class UDPClientProtocol(asyncio.DatagramProtocol):
 
     def connection_made(self, transport: transports.BaseTransport) -> None:
         self.transport = transport
-        sock = self.transport.get_extra_info('socket')
+        sock = self.transport.get_extra_info("socket")
         addrinfo = socket.getaddrinfo(LOCAL_LINK_MULTICAST_ADDRESS, UDP_SERVER_PORT)[0]
         logger.info("Attempting to connect to %s.", addrinfo[4])
         # Modifying socket options so that multicasting is possible
-        ttl = struct.pack('@i', 2)
+        ttl = struct.pack("@i", 2)
         sock.setsockopt(socket.IPPROTO_IPV6, socket.IPV6_MULTICAST_HOPS, ttl)
         # self.transport.sendto(self.message, (LOCAL_LINK_MULTICAST_ADDRESS, UDP_SERVER_PORT))
         # logger.info("Sent SECC discovery request.")
         self._send_discovery_req_task = asyncio.ensure_future(self.send_SDP_req())
-        
-        
-    async def send_SDP_req(self):
+
+    async def send_SDP_req(self) -> None:
         for _ in range(10):
-            self.transport.sendto(self.message, (LOCAL_LINK_MULTICAST_ADDRESS, UDP_SERVER_PORT))
-            logger.info("Sent SECC discovery request. " + str(self.number_of_SDP_REQ_sent))
+            self.transport.sendto(
+                self.message, (LOCAL_LINK_MULTICAST_ADDRESS, UDP_SERVER_PORT)
+            )
+            logger.info(
+                "Sent SECC discovery request. " + str(self.number_of_SDP_REQ_sent)
+            )
             self.number_of_SDP_REQ_sent += 1
             await asyncio.sleep(3)
-            
+
         print("No answer from UDP Server, limit of requests reached")
         sys.exit(1)
 
@@ -69,8 +70,11 @@ class UDPClientProtocol(asyncio.DatagramProtocol):
         if self.message_handler.is_valid(packet):
             self.tcp_server_address = packet.payload.getfieldval("TargetAddress")
             self.tcp_server_port = packet.payload.getfieldval("TargetPort")
-            logger.info("TCP server is reachable at (%s, %s).", packet.payload.getfieldval("TargetAddress"),
-                        packet.payload.getfieldval("TargetPort"))
+            logger.info(
+                "TCP server is reachable at (%s, %s).",
+                packet.payload.getfieldval("TargetAddress"),
+                packet.payload.getfieldval("TargetPort"),
+            )
             if self._send_discovery_req_task:
                 self._send_discovery_req_task.cancel()
             if self.transport:
@@ -83,6 +87,8 @@ class UDPClientProtocol(asyncio.DatagramProtocol):
 
     def error_received(self, exc: Exception) -> None:
         logger.error("Error received, exception: %s.", exc)
+        logger.error(traceback.format_exc())
+        pass
 
     def connection_lost(self, exc: Optional[Exception]) -> None:
         if exc:
@@ -91,7 +97,7 @@ class UDPClientProtocol(asyncio.DatagramProtocol):
         loop.stop()
 
 
-def get_udp_client(udp_port, interface):
+def get_udp_client(udp_port: int, interface: str) -> Tuple[transports.DatagramTransport, UDPClientProtocol]:
     """Returns the UDP client used in 15118 communication.
 
     :param udp_port: The UDP port for the client.
@@ -101,15 +107,12 @@ def get_udp_client(udp_port, interface):
     addrinfo = socket.getaddrinfo(LOCAL_LINK_MULTICAST_ADDRESS, None)[0]
     # Creating custom socket for UDP multicasting (client side)
     sock = socket.socket(addrinfo[0], socket.SOCK_DGRAM)
-    # sock.setsockopt(socket.SOL_SOCKET, socket.SO_BINDTODEVICE, str(interface + '\0').encode('utf-8'))
-    # TODO: socket.SO_BINDTODEVICE is not available in Windows
-    sock.setsockopt(socket.SOL_SOCKET, socket.SO_EXCLUSIVEADDRUSE, str(interface + '\0').encode('utf-8'))
+    if sys.platform != "win32" and sys.platform != "darwin":
+        sock.setsockopt(socket.SOL_SOCKET, socket.SO_BINDTODEVICE, str(interface + '\0').encode('utf-8'))
     sock.bind(("", udp_port))
     loop = asyncio.get_event_loop()
-    logger.info("Starting UDP client.")
+    logger.info(f"Starting UDP client on interface:address:port -> {interface}:{LOCAL_LINK_MULTICAST_ADDRESS}:{udp_port}")
     task = loop.create_datagram_endpoint(UDPClientProtocol, sock=sock)
     transport, protocol = loop.run_until_complete(task)
-    
-    loop.run_forever() # This loop is keeped alive for waitting UDP datagram, once valid message received, it will be stopped
+    loop.run_forever()  # This loop is keeped alive for waitting UDP datagram, once valid message received, it will be stopped
     return transport, protocol
-

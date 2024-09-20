@@ -13,17 +13,23 @@
 """
 
 import logging
+import colorama
 
 
 class CustomFormatter(logging.Formatter):
     """Logging Formatter to add colors and count warning / errors,
     source: https://stackoverflow.com/questions/384076/how-can-i-color-python-logging-output"""
 
-    grey = "\x1b[38;21m"
-    yellow = "\x1b[33;21m"
-    red = "\x1b[31;21m"
-    bold_red = "\x1b[31;1m"
-    reset = "\x1b[0m"
+    # grey = "\x1b[38;21m"
+    # yellow = "\x1b[33;21m"
+    # red = "\x1b[31;21m"
+    # bold_red = "\x1b[31;1m"
+    # reset = "\x1b[0m"
+    grey = colorama.Fore.LIGHTBLACK_EX
+    yellow = colorama.Fore.YELLOW
+    red = colorama.Fore.RED
+    bold_red = colorama.Fore.LIGHTRED_EX
+    reset = colorama.Style.RESET_ALL
     info_format = "[%(asctime)s] %(levelname)s (%(module)s): %(message)s"
     format = "[%(asctime)s] %(levelname)s (%(module)s): %(message)s (%(filename)s:%(lineno)d)"
 

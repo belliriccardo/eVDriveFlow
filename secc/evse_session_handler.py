@@ -21,6 +21,29 @@ import netifaces
 from configparser import ConfigParser
 
 
+def list_network_interfaces():
+    interfaces = netifaces.interfaces()
+    ifaddresses = {
+        interface: netifaces.ifaddresses(interface) for interface in interfaces
+    }
+    interfaces_with_ipv6 = {
+        interface: ifaddresses[interface]  # [netifaces.AF_INET6]
+        for interface in interfaces
+        if netifaces.AF_INET6 in ifaddresses[interface]
+    }
+    for interface, ifaddresses in interfaces_with_ipv6.items():
+        print("-" * 80)
+        print(f'INTERFACE: "{interface}"')
+        for ifaddress, value in ifaddresses.items():
+            print(
+                f'IFADDRESS: "{ifaddress}"' + " - (IPv6)"
+                if ifaddress == netifaces.AF_INET6
+                else ""
+            )
+            pprint(value)
+        print("-" * 80, end="\n\n")
+
+
 class EVSESessionHandler(SessionHandler):
     """This is the class representing the EVSE session handler."""
 
@@ -45,8 +68,5 @@ class EVSESessionHandler(SessionHandler):
 
         :return:
         """
-        # interfaces = netifaces.interfaces()
-        # for interface in interfaces:
-        #     print(f"INTERFACE: {interface}")
-        #     pprint(netifaces.ifaddresses(interface))
+        list_network_interfaces()
         return netifaces.ifaddresses(self.interface)[netifaces.AF_INET6][0]["addr"]
